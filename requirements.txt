@@ -5,3 +5,4 @@ packaging==24.2
 pip-chill==1.0.3
 platformdirs==4.2.2
 tomli==2.0.1
+xgboost
