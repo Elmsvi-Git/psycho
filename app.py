@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 28 12:15:58 2025
+Created on Mon Apr 28 21:54:49 2025
 
-@author: Asus
+@author: ElaheMousavi
 """
 
 import streamlit as st
@@ -43,17 +43,26 @@ cope_mapping = {
 
 # Preprocessing function
 def preprocess_inputs(q1, q2, q3, q4, q5, q6, q7, q8):
+    if None in [q1, q2, q3, q4, q5, q6, q7, q8]:
+        st.warning("⚠️ Please answer all questions before proceeding.")
+        st.stop()  # <--- This stops the code immediately after the warning.
+
+    
+    if None in [q1, q2, q3, q4, q5, q6, q7, q8]:
+        st.warning("Please answer all questions before proceeding.")
+        return None
+
     q1_encoded = neo_mapping.get(q1, 2)
     q2_encoded = neo_mapping.get(q2, 2)
-    q3_encoded = neo_mapping.get(q3, 2)
+    q3_encoded = 4-neo_mapping.get(q3, 2)
     q4_encoded = neo_mapping.get(q4, 2)
     q5_encoded = cope_mapping.get(q5, 2)
     q6_encoded = cope_mapping.get(q6, 2)
     q7_encoded = cope_mapping.get(q7, 2)
     q8_encoded = cope_mapping.get(q8, 2)
 
-    data = np.array([[q5_encoded, q7_encoded, q4_encoded, q3_encoded,
-                      q2_encoded, q8_encoded, q6_encoded, q1_encoded]])
+    data = np.array([[q5_encoded, q6_encoded, q4_encoded, q3_encoded,
+                      q2_encoded, q7_encoded, q8_encoded, q1_encoded]])
 
     selected_features = ['Q5', 'Q7', 'question_51', 'question_42',
                          'question_26', 'Q8', 'Q18', 'question_21']
@@ -102,7 +111,7 @@ if submitted:
         prediction_proba = model.predict_proba(inputs)
 
         pred_map = {0: "DISORDER PRONE", 1: "EXTREMITY RESILIENT", 2: "MODERATE"}
-        prediction_label = pred_map.get(prediction[0], "Unknown")
+        prediction_label = pred_map.get(np.argmax(prediction_proba[0]), "Unknown")
 
         st.success(f"🎯 Predicted Label: **{prediction_label}**")
         st.write(f"🔍 Confidence: **{np.max(prediction_proba[0]):.2f}**")
