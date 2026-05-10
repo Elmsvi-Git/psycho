@@ -89,6 +89,10 @@ with st.form("questionnaire_form"):
     st.markdown(progress_text(4, 8))
     q4 = st.radio("I often feel helpless and want someone else to solve my problems.", neo_options, horizontal=True, index=None)
 
+    st.write("Answer all the questions below carefully:")
+
+    st.write("How have you been coping with stress recently?")
+    
     st.markdown(progress_text(5, 8))
     q5 = st.radio("I take direct action to get around the problem.", cope_options, horizontal=True, index=None)
 
